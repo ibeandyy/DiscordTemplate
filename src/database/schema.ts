@@ -1,5 +1,5 @@
 import { connect, Schema, model } from "mongoose";
-
+import { URI } from "../config.json";
 const eventSchema = new Schema({
   ticker: String,
   scenario: String,
@@ -17,7 +17,7 @@ export interface eventInterface {
 export const EventModel = model("Event", eventSchema);
 
 export const connectDB = async () => {
-  connect("mongodb://localhost:27017/Events", {
+  connect(URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   } as any);
