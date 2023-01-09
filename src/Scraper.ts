@@ -39,7 +39,7 @@ export const getLastEvent = async () => {
   const companyName = await companyName1?.jsonValue();
   const scenario = await scenario1?.jsonValue();
   const bob = await bob1?.jsonValue();
-  console.log(companyName, scenario, bob);
+  // console.log(companyName, scenario, bob);
   if (companyName && scenario && bob && date)
     return {
       ticker: companyName,
