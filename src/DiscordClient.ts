@@ -43,17 +43,20 @@ export class DiscordClient extends Client {
   async getEvent() {
     try {
       const data = await getLastEvent();
-      if (!data) return;
-      if (this.lastEvent?.ticker === data.ticker) return;
-      this.lastEvent = (await new EventModel(data).save()) as eventInterface;
-      this.sendEvent(this.lastEvent);
-      await wait(50000);
-      this.getEvent();
+      if (data) {
+        if (this.lastEvent?.ticker !== data.ticker) {
+          this.lastEvent = (await new EventModel(
+            data
+          ).save()) as eventInterface;
+          await this.sendEvent(this.lastEvent);
+        }
+      }
     } catch (e) {
       console.log(e);
-      await wait(50000);
-      this.getEvent();
     }
+
+    await wait(500);
+    await this.getEvent();
   }
   async sendEvent(event: eventInterface) {
     if (!this.channel) return;
