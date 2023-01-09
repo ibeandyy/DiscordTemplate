@@ -1,7 +1,7 @@
 import { BaseInteraction, Client, REST, Routes } from "discord.js";
 
 import { token, clientId } from "./config.json";
-
+import { connectDB } from "./database/schema";
 import wait from "wait";
 
 export class DiscordClient extends Client {
@@ -10,6 +10,8 @@ export class DiscordClient extends Client {
     this.listenButtons();
   }
   async initialize() {
+    connectDB();
+
     await this.login(token);
   }
   listenButtons() {
@@ -21,22 +23,5 @@ export class DiscordClient extends Client {
         } catch (e) {}
       }
     });
-  }
-  setCommands() {
-    let commands = [];
-    // const lsdPositions = LSDPositions.toJSON();
-
-    // commands.push(lsdPositions);
-    const rest = new REST({ version: "10" }).setToken(data.TOKEN);
-    rest
-      .put(Routes.applicationGuildCommands(data.CLIENTID, data.GUILD), {
-        body: commands,
-      })
-      .then((data: any) =>
-        console.log(
-          `Successfully registered ${data.length} application commands.`
-        )
-      )
-      .catch(console.error);
   }
 }
