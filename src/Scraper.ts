@@ -1,8 +1,9 @@
 import puppeteer from "puppeteer";
 import { username, password } from "./config.json";
 import wait from "wait";
-const main = async () => {
-  const browser = await puppeteer.launch({ headless: false });
+import { eventInterface } from "./database/schema";
+export const getLastEvent = async () => {
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   await page.goto("https://app.levelfields.ai");
   await page.type(".Login_Input__XlFCw", username);
@@ -34,20 +35,19 @@ const main = async () => {
   const companyName1 = await companyNameNode?.getProperty("textContent");
   const scenario1 = await scenarioNode?.getProperty("textContent");
   const bob1 = await bobNode?.getProperty("src");
-  //   /static/media/bear.c78a45665e1f859de9b4f1f0618c1a40.svg
   const date = await date1?.jsonValue();
   const companyName = await companyName1?.jsonValue();
   const scenario = await scenario1?.jsonValue();
   const bob = await bob1?.jsonValue();
   console.log(companyName, scenario, bob);
-  //   await page.waitForNavigation();
-  return {
-    ticker: companyName,
-    scenario: scenario,
-    bob: bob?.endsWith("bear.c78a45665e1f859de9b4f1f0618c1a40.svg")
-      ? "bear"
-      : "bull",
-    date: date,
-  };
+  if (companyName && scenario && bob && date)
+    return {
+      ticker: companyName,
+      scenario: scenario,
+      bob: bob?.endsWith("bear.c78a45665e1f859de9b4f1f0618c1a40.svg")
+        ? "bearish 🐻"
+        : "bullish 🐂",
+      date: date,
+    } as eventInterface;
+  return null;
 };
-main();
