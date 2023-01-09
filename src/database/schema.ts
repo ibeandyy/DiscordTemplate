@@ -14,7 +14,7 @@ export interface eventInterface {
   date: string;
 }
 
-export const EventModel = model("Price", eventSchema);
+export const EventModel = model("Event", eventSchema);
 
 export const connectDB = async () => {
   connect("mongodb://localhost:27017/Events", {
