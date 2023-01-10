@@ -3,8 +3,10 @@ import { username, password } from "./config.json";
 import wait from "wait";
 import { eventInterface } from "./database/schema";
 export const getLastEvent = async () => {
-  const browser = await puppeteer.launch({ headless: true });
+  console.log("looking");
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+
   await page.goto("https://app.levelfields.ai");
   await page.type(".Login_Input__XlFCw", username);
   await page.click(".Login_PasswordWrapper__io09P");
@@ -13,9 +15,15 @@ export const getLastEvent = async () => {
   await page.waitForNavigation();
   await page.goto("https://app.levelfields.ai/dashboard");
 
-  const button: any = await page.$x('//button[contains(text(), "My Alerts")]');
-  await button[0]?.click();
-  wait(5000);
+  const button: any = await page.waitForSelector(
+    "xpath/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[2]/div/div/div[1]/button[2]"
+  );
+  await button.click();
+
+  const myRequests = await page.waitForSelector(
+    "xpath/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/h4"
+  );
+  await wait(500);
   const companyNameNode = await page.waitForSelector(
     "xpath/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/div/div/div/div[2]/div[1]/div/div/div[2]/a/div[1]"
   );
@@ -37,7 +45,8 @@ export const getLastEvent = async () => {
   const scenario = await scenario1?.jsonValue();
   const bob = await bob1?.jsonValue();
   await browser.close();
-  // console.log(companyName, scenario, bob);
+  console.log(companyName, scenario, bob);
+
   if (companyName && scenario && bob && date)
     return {
       ticker: companyName,
