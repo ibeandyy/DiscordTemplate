@@ -46,5 +46,6 @@ export const getLastEvent = async () => {
         : "bullish 🐂",
       date: date,
     } as eventInterface;
+  await browser.close();
   return null;
 };
