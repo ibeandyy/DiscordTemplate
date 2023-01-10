@@ -36,6 +36,7 @@ export const getLastEvent = async () => {
   const companyName = await companyName1?.jsonValue();
   const scenario = await scenario1?.jsonValue();
   const bob = await bob1?.jsonValue();
+   await browser.close();
   // console.log(companyName, scenario, bob);
   if (companyName && scenario && bob && date)
     return {
@@ -46,6 +47,6 @@ export const getLastEvent = async () => {
         : "bullish 🐂",
       date: date,
     } as eventInterface;
-  await browser.close();
+ 
   return null;
 };
