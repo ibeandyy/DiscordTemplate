@@ -17,16 +17,16 @@ export const getLastEvent = async () => {
   await button[0]?.click();
   wait(5000);
   const companyNameNode = await page.waitForSelector(
-    "div.Table-row:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1) > div:nth-child(1)"
+    "xpath/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/div/div/div/div[2]/div[1]/div/div/div[2]/a/div[1]"
   );
   const scenarioNode = await page.waitForSelector(
-    "div.Table-row:nth-child(2) > div:nth-child(2) > div:nth-child(1) > a:nth-child(1) > p:nth-child(1)"
+    "xpath/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/div/div/div/div[2]/div[2]/div/a/p"
   );
   const bobNode = await page.waitForSelector(
-    "div.Table-row:nth-child(2) > div:nth-child(8) > div:nth-child(1) > p:nth-child(1) > img:nth-child(1)"
+    "xpath//html/body/div[1]/div/div/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/div/div/div/div[2]/div[8]/div/p/img"
   );
   const dateNode = await page.waitForSelector(
-    "div.Table-row:nth-child(2) > div:nth-child(4) > div:nth-child(1) > p:nth-child(1)"
+    "xpath/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/div/div/div/div[2]/div[4]/div/p"
   );
   const date1 = await dateNode?.getProperty("textContent");
   const companyName1 = await companyNameNode?.getProperty("textContent");
@@ -36,7 +36,7 @@ export const getLastEvent = async () => {
   const companyName = await companyName1?.jsonValue();
   const scenario = await scenario1?.jsonValue();
   const bob = await bob1?.jsonValue();
-   await browser.close();
+  await browser.close();
   // console.log(companyName, scenario, bob);
   if (companyName && scenario && bob && date)
     return {
@@ -47,6 +47,6 @@ export const getLastEvent = async () => {
         : "bullish 🐂",
       date: date,
     } as eventInterface;
- 
+
   return null;
 };
