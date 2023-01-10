@@ -4,7 +4,7 @@ import wait from "wait";
 import { eventInterface } from "./database/schema";
 export const getLastEvent = async () => {
   console.log("looking");
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
   await page.goto("https://app.levelfields.ai");
