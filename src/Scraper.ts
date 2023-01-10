@@ -12,13 +12,10 @@ export const getLastEvent = async () => {
   await page.click(".Login_Button__jkxUr[type=submit]");
   await page.waitForNavigation();
   await page.goto("https://app.levelfields.ai/dashboard");
-  // Scrape data from the dashboard page here
-  //   await page.click(".My Alerts");
-  //select the button named My Alerts
+
   const button: any = await page.$x('//button[contains(text(), "My Alerts")]');
   await button[0]?.click();
   wait(5000);
-  const div = await page.$(".TableCell");
   const companyNameNode = await page.waitForSelector(
     "div.Table-row:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1) > div:nth-child(1)"
   );

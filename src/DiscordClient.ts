@@ -56,7 +56,7 @@ export class DiscordClient extends Client {
     }
 
     await wait(500);
-    await this.getEvent();
+    this.getEvent();
   }
   async sendEvent(event: eventInterface) {
     if (!this.channel) return;
