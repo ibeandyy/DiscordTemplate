@@ -76,8 +76,8 @@ export const getLastEvent = async (lastTicker: string | undefined) => {
       ticker: companyName,
       scenario: scenario,
       bob: bob?.endsWith("bear.c78a45665e1f859de9b4f1f0618c1a40.svg")
-        ? "bearish 🐻"
-        : "bullish 🐂",
+        ? "Bearish 🐻"
+        : "Bullish 🐂",
       date: date,
       url: newUrl,
     } as eventInterface;

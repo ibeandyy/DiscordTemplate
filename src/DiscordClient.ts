@@ -1,9 +1,11 @@
 import {
   BaseInteraction,
   Client,
+  EmbedBuilder,
   REST,
   Routes,
   TextBasedChannel,
+  hyperlink,
 } from "discord.js";
 
 import { TOKEN, CHANNEL } from "./config.json";
@@ -60,13 +62,26 @@ export class DiscordClient extends Client {
   }
   async sendEvent(event: eventInterface) {
     if (!this.channel) return;
-    if (event.url) {
-      this.channel.send({
-        content: `@here new event detected: **${event.ticker}** -- [${event.scenario}](${event.url}) -- ${event.date} -- ${event.bob} `,
-      });
-    } else
-      this.channel.send({
-        content: `@here new event detected: **${event.ticker}** -- ${event.scenario} -- ${event.date} -- ${event.bob} `,
-      });
+    this.channel.send({
+      content: "@here",
+      embeds: [embedMaker(event)],
+    });
   }
 }
+
+const embedMaker = (event: eventInterface) => {
+  const embed = new EmbedBuilder()
+    .setTitle(`Ticker: ${event.ticker}`)
+    .setDescription(`Event: ${event.scenario}`)
+    .addFields([{ name: "Bearish or Bullish", value: event.bob, inline: true }])
+    .setTimestamp()
+    .setAuthor({
+      name: "Le Scrapooor",
+      iconURL: "https://i.postimg.cc/xTyBGPJG/904067125268873307.gif",
+    });
+  event.scenario.startsWith("Bearish")
+    ? embed.setColor("#e81d17")
+    : embed.setColor("#17e860");
+  if (event.url) embed.setURL(event.url);
+  return embed;
+};
