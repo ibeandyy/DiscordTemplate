@@ -42,7 +42,7 @@ export class DiscordClient extends Client {
 
   async getEvent() {
     try {
-      const data = await getLastEvent();
+      const data = await getLastEvent(this.lastEvent?.ticker);
       if (data) {
         if (this.lastEvent?.ticker !== data.ticker) {
           this.lastEvent = (await new EventModel(
@@ -60,8 +60,13 @@ export class DiscordClient extends Client {
   }
   async sendEvent(event: eventInterface) {
     if (!this.channel) return;
-    this.channel.send({
-      content: `@here new event detected: **${event.ticker}** -- ${event.scenario} -- ${event.date} -- ${event.bob}`,
-    });
+    if (event.url) {
+      this.channel.send({
+        content: `@here new event detected: **${event.ticker}** -- [${event.scenario}](${event.url}) -- ${event.date} -- ${event.bob} `,
+      });
+    } else
+      this.channel.send({
+        content: `@here new event detected: **${event.ticker}** -- ${event.scenario} -- ${event.date} -- ${event.bob} `,
+      });
   }
 }

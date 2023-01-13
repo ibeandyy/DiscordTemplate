@@ -5,6 +5,7 @@ const eventSchema = new Schema({
   scenario: String,
   bob: String,
   date: String,
+  url: { type: String, required: false },
 });
 
 export interface eventInterface {
@@ -12,6 +13,7 @@ export interface eventInterface {
   scenario: string;
   bob: string;
   date: string;
+  url?: string;
 }
 
 export const EventModel = model("Event", eventSchema);
