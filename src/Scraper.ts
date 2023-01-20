@@ -22,7 +22,7 @@ export const getLastEvent = async (lastTicker: string | undefined) => {
     await button.click();
 
     const myRequests = await page.waitForSelector(
-      "xpath/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/h4"
+      "/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/h4"
     );
     await wait(500);
     const companyNameNode = await page.waitForSelector(
