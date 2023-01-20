@@ -85,6 +85,7 @@ export const getLastEvent = async (lastTicker: string | undefined) => {
     await browser.close();
     return null;
   } catch (e) {
+    console.log("errored ", e);
     await browser.close();
   }
 };
