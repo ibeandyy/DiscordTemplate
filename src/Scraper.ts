@@ -83,6 +83,7 @@ export const getLastEvent = async (lastTicker: string | undefined) => {
         url: newUrl,
       } as eventInterface;
   } catch (e) {
+    await browser.close();
     if (companyName && scenario && bob && date)
       return {
         ticker: companyName,
