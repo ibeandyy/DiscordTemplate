@@ -1,6 +1,5 @@
 import puppeteer from "puppeteer";
 import { username, password } from "./config.json";
-import wait from "wait";
 import { eventInterface } from "./database/schema";
 export const getLastEvent = async (lastTicker: string | undefined) => {
   console.log("looking");
@@ -66,22 +65,35 @@ export const getLastEvent = async (lastTicker: string | undefined) => {
     "xpath/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/div/div/div/div[2]/div[1]/div/div/div[1]/div/p[4]/a"
   );
   await urlButton?.click();
-  const innerUrlButton = await page.waitForSelector(
-    "xpath/html/body/div[1]/div/div/div[2]/div/div/div/div/div[2]/div/div/div/a"
-  );
-  const url = await innerUrlButton?.getProperty("href");
-  const newUrl = await url?.jsonValue();
-  await browser.close();
-  if (companyName && scenario && bob && date && url)
-    return {
-      ticker: companyName,
-      scenario: scenario,
-      bob: bob?.endsWith("bear.c78a45665e1f859de9b4f1f0618c1a40.svg")
-        ? "Bearish 🐻"
-        : "Bullish 🐂",
-      date: date,
-      url: newUrl,
-    } as eventInterface;
+  try {
+    const innerUrlButton = await page.waitForSelector(
+      "xpath/html/body/div[1]/div/div/div[2]/div/div/div/div/div[2]/div/div/div/a"
+    );
+    const url = await innerUrlButton?.getProperty("href");
+    const newUrl = await url?.jsonValue();
+    await browser.close();
+    if (companyName && scenario && bob && date && url)
+      return {
+        ticker: companyName,
+        scenario: scenario,
+        bob: bob?.endsWith("bear.c78a45665e1f859de9b4f1f0618c1a40.svg")
+          ? "Bearish 🐻"
+          : "Bullish 🐂",
+        date: date,
+        url: newUrl,
+      } as eventInterface;
+  } catch (e) {
+    if (companyName && scenario && bob && date)
+      return {
+        ticker: companyName,
+        scenario: scenario,
+        bob: bob?.endsWith("bear.c78a45665e1f859de9b4f1f0618c1a40.svg")
+          ? "Bearish 🐻"
+          : "Bullish 🐂",
+        date: date,
+        url: undefined,
+      } as eventInterface;
+  }
 
   return null;
 };
