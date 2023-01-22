@@ -1,5 +1,6 @@
 import { connect, Schema, model } from "mongoose";
 import { URI } from "../config.json";
+import { Browser } from "puppeteer";
 const eventSchema = new Schema({
   ticker: String,
   scenario: String,
@@ -14,6 +15,7 @@ export interface eventInterface {
   bob: string;
   date: string;
   url?: string;
+  browser: Browser;
 }
 
 export const EventModel = model("Event", eventSchema);

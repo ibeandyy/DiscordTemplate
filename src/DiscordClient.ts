@@ -12,6 +12,7 @@ import { TOKEN, CHANNEL } from "./config.json";
 import { connectDB, eventInterface, EventModel } from "./database/schema";
 import wait from "wait";
 import { getLastEvent } from "./Scraper";
+import { Browser, Page } from "puppeteer";
 
 export class DiscordClient extends Client {
   lastEvent: eventInterface | undefined;
@@ -42,14 +43,15 @@ export class DiscordClient extends Client {
     });
   }
 
-  async getEvent() {
+  async getEvent(browser?: Browser) {
     try {
-      const data = await getLastEvent(this.lastEvent?.ticker);
+      const data = await getLastEvent(this.lastEvent?.ticker, browser);
       if (data) {
         if (this.lastEvent?.ticker !== data.ticker) {
           this.lastEvent = (await new EventModel(
             data
           ).save()) as eventInterface;
+
           await this.sendEvent(this.lastEvent);
         }
       }

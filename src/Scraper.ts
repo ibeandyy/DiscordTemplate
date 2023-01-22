@@ -1,10 +1,14 @@
-import puppeteer from "puppeteer";
+import puppeteer, { Browser } from "puppeteer";
 import { username, password } from "./config.json";
 import { eventInterface } from "./database/schema";
-export const getLastEvent = async (lastTicker: string | undefined) => {
+export const getLastEvent = async (
+  lastTicker: string | undefined,
+  browser?: Browser
+) => {
   console.log("looking");
-  const browser = await puppeteer.launch({ headless: true });
-
+  if (!browser) {
+    browser = await puppeteer.launch({ headless: true });
+  }
   const page = await browser.newPage();
 
   await page.goto("https://app.levelfields.ai");
@@ -48,7 +52,7 @@ export const getLastEvent = async (lastTicker: string | undefined) => {
   console.log(companyName, scenario, bob);
 
   if (companyName == lastTicker) {
-    await browser.close();
+    await page.close();
     return {
       ticker: companyName,
       scenario: scenario,
@@ -56,9 +60,10 @@ export const getLastEvent = async (lastTicker: string | undefined) => {
         ? "bearish 🐻"
         : "bullish 🐂",
       date: date,
+      browser: browser,
     } as eventInterface;
   }
-  const urlNode = await page.hover(
+  await page.hover(
     "xpath/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/div/div/div/div[2]/div[1]/div/div/div[1]/img"
   );
   const urlButton = await page.waitForSelector(
@@ -71,7 +76,7 @@ export const getLastEvent = async (lastTicker: string | undefined) => {
     );
     const url = await innerUrlButton?.getProperty("href");
     const newUrl = await url?.jsonValue();
-    await browser.close();
+    await page.close();
     if (companyName && scenario && bob && date && url)
       return {
         ticker: companyName,
@@ -81,9 +86,10 @@ export const getLastEvent = async (lastTicker: string | undefined) => {
           : "Bullish 🐂",
         date: date,
         url: newUrl,
+        browser: browser,
       } as eventInterface;
   } catch (e) {
-    await browser.close();
+    await page.close();
     if (companyName && scenario && bob && date)
       return {
         ticker: companyName,
@@ -93,8 +99,11 @@ export const getLastEvent = async (lastTicker: string | undefined) => {
           : "Bullish 🐂",
         date: date,
         url: undefined,
+        browser: browser,
       } as eventInterface;
   }
+  await page.close();
+  await browser.close();
 
   return null;
 };
